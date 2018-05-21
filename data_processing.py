@@ -114,26 +114,26 @@ def split_data():
     test_a = pd.read_csv('data_csv/round1_ijcai_18_test_a_20180301.txt', sep=' ')
     test_a['item_category_list_1'] = test_a['item_category_list'].apply(lambda x:x.split(';'))
     test_a['last_category_id'] = test_a['item_category_list_1'].apply(last_category)
-    print(test_a['last_category_id'])
-    # test_b = pd.read_csv('data_csv/round1_ijcai_18_test_b_20180418.txt', sep=' ')
-    # test = pd.concat([test_a,test_b],axis=0)
-    #
-    # data = pd.concat([train_data,test],axis=0)
-    # data.reset_index(drop=True, inplace=True)
-    # data = convert_data(data)
-    #
-    # print('数据预处理')
-    # data = base_process(data)
-    #
-    # dataset3 = data.loc[data.day == 25]
-    # feature3 = data.loc[(data.day < 25) & (data.day >19)]
-    # dataset2 = data.loc[data.day == 24]
-    # feature2 = data.loc[(data.day < 24) & (data.day >18)]
-    # dataset1 = data.loc[data.day == 23]
-    # feature1 = data.loc[data.day <23]
-    #
-    # return dataset3,feature3,dataset2,feature2,dataset1,feature1
+    test_b = pd.read_csv('data_csv/round1_ijcai_18_test_b_20180418.txt', sep=' ')
+    test = pd.concat([test_a,test_b],axis=0)
+    
+    data = pd.concat([train_data,test],axis=0)
+    data.reset_index(drop=True, inplace=True)
+    data = convert_data(data)
+    
+    print('数据预处理')
+    data = base_process(data)
+    
+    dataset3 = data.loc[data.day == 25]
+    feature3 = data.loc[(data.day < 25) & (data.day >19)]
+    dataset2 = data.loc[data.day == 24]
+    feature2 = data.loc[(data.day < 24) & (data.day >18)]
+    dataset1 = data.loc[data.day == 23]
+    feature1 = data.loc[data.day <23]
+    
+    return dataset3,feature3,dataset2,feature2,dataset1,feature1
 
+# 提取预测数据当天特征
 def get_label_feature(dataset):
     t=dataset[['user_id','day']]
     t['this_day_user_click_times']=1
@@ -239,6 +239,7 @@ def get_label_feature(dataset):
 
     return label_feature
 
+# 根据划窗提取历史数据单特征
 def get_one_feature(feature,label_feature):
     t = feature[['user_id']]
     t['user_click_total_times'] = 1
@@ -470,6 +471,7 @@ def get_one_feature(feature,label_feature):
 
     return dataset
 
+# 交叉双特征
 def get_two_feature(feature,label_feature):
 
     t=feature[['user_id','item_id']]
@@ -707,6 +709,7 @@ def get_two_feature(feature,label_feature):
     dataset.drop(drop,axis=1,inplace=True)
     return dataset
 
+# 交叉三特征
 def get_three_feature(feature,dataset):
 
     t=feature[['user_gender_id','user_age_level','item_brand_id']]
@@ -948,6 +951,7 @@ def get_three_feature(feature,dataset):
     dataset.drop(drop,axis=1,inplace=True)
     return dataset
 
+# 统计平均特征
 def get_avg_feature(feature,dataset):
 
     t=feature[['item_id','day']]
@@ -1029,7 +1033,7 @@ def get_avg_feature(feature,dataset):
 
     return dataset
 
-
+# 时间差特征(用户点击时间差:标记第一次点击和最后一次点击)
 def doTrick(data):
 
     subset = ['user_id','item_id', 'shop_id']
@@ -1178,6 +1182,7 @@ def do_category_trick(data):
 
     return data
 
+# 处理item_property_list特征,根据分词预测概率当作新特征拼接
 def property_feature(feature,dataset):
 
     feature_df = feature[['item_property_list','instance_id']]
@@ -1218,7 +1223,7 @@ def property_feature(feature,dataset):
 
     return dataset
 
-
+# 类似处理predict_category_property特征
 def predict_feature(feature,dataset):
 
     feature_df = feature[['predict_category_property', 'instance_id']]
@@ -1258,6 +1263,7 @@ def predict_feature(feature,dataset):
 
     return dataset
 
+# 商铺相似度特征
 def get_shop_share_features(feature,dataset):
 
     # Nmb: 每个商铺每种品牌商品的数量
@@ -1309,6 +1315,7 @@ def get_shop_share_features(feature,dataset):
     dataset = dataset.drop(['shop_trade_times_Um','brand_trade_times_Ub'],axis=1)
     return dataset
 
+# 穿越特征:用户在此次点击后还会点击多少次
 def user_reclick_times(df):
     dic = {}
     def _a(group):
@@ -1334,104 +1341,104 @@ if __name__=="__main__":
     # feature3,2,1:(328923, 33) (342432, 33) (357082, 33)
 
      split_data()
-    # print(dataset3.shape,  dataset2.shape, dataset1.shape, feature3.shape,feature2.shape, feature1.shape)
-    #
-    # dataset3.to_csv('data_csv/data3.csv', index=False)
-    # dataset2.to_csv('data_csv/data2.csv', index=False)
-    # dataset1.to_csv('data_csv/data1.csv', index=False)
-    #
-    # feature1.to_csv('data_csv/feature1.csv',index=False)
-    # feature2.to_csv('data_csv/feature2.csv', index=False)
-    # feature3.to_csv('data_csv/feature3.csv', index=False)
+    print(dataset3.shape,  dataset2.shape, dataset1.shape, feature3.shape,feature2.shape, feature1.shape)
+    
+    dataset3.to_csv('data_csv/data3.csv', index=False)
+    dataset2.to_csv('data_csv/data2.csv', index=False)
+    dataset1.to_csv('data_csv/data1.csv', index=False)
+    
+    feature1.to_csv('data_csv/feature1.csv',index=False)
+    feature2.to_csv('data_csv/feature2.csv', index=False)
+    feature3.to_csv('data_csv/feature3.csv', index=False)
 
 
-    # data3 = pd.read_csv('data_csv/data3.csv')
-    # data2 = pd.read_csv('data_csv/data2.csv')
-    # data1 = pd.read_csv('data_csv/data1.csv')
-    #
-    # label_feature3 = get_label_feature(data3)
-    # label_feature3.to_csv('data_csv/label_feature3.csv',index=False)
-    # label_feature2=get_label_feature(data2)
-    # label_feature2.to_csv('data_csv/label_feature2.csv', index=False)
-    # label_feature1 = get_label_feature(data1)
-    # label_feature1.to_csv('data_csv/label_feature1.csv', index=False)
+    data3 = pd.read_csv('data_csv/data3.csv')
+    data2 = pd.read_csv('data_csv/data2.csv')
+    data1 = pd.read_csv('data_csv/data1.csv')
+    
+    label_feature3 = get_label_feature(data3)
+    label_feature3.to_csv('data_csv/label_feature3.csv',index=False)
+    label_feature2=get_label_feature(data2)
+    label_feature2.to_csv('data_csv/label_feature2.csv', index=False)
+    label_feature1 = get_label_feature(data1)
+    label_feature1.to_csv('data_csv/label_feature1.csv', index=False)
 
-    # feature3 = pd.read_csv('data_csv/feature3.csv')
-    # label_feature3=pd.read_csv('data_csv/label_feature3.csv')
-    # dataset3 = get_one_feature(feature3,label_feature3)
-    # dataset3 = get_two_feature(feature3,dataset3)
-    # dataset3 = get_three_feature(feature3,dataset3)
-    # # dataset3 = get_shop_share_features(feature3,dataset3)
-    # dataset3.drop_duplicates(inplace=True)
-    # dataset3.to_csv('data_csv/dataset3.csv',index=False)
+    feature3 = pd.read_csv('data_csv/feature3.csv')
+    label_feature3=pd.read_csv('data_csv/label_feature3.csv')
+    dataset3 = get_one_feature(feature3,label_feature3)
+    dataset3 = get_two_feature(feature3,dataset3)
+    dataset3 = get_three_feature(feature3,dataset3)
+    # dataset3 = get_shop_share_features(feature3,dataset3)
+    dataset3.drop_duplicates(inplace=True)
+    dataset3.to_csv('data_csv/dataset3.csv',index=False)
 
-    # feature2 = pd.read_csv('data_csv/feature2.csv')
-    # label_feature2 = pd.read_csv('data_csv/label_feature2.csv')
-    # dataset2 = get_one_feature(feature2, label_feature2)
-    # dataset2 = get_two_feature(feature2, dataset2)
-    # dataset2 = get_three_feature(feature2, dataset2)
-    # # dataset2 = get_shop_share_features(feature2,dataset2)
-    # dataset2.drop_duplicates(inplace=True)
-    # dataset2.to_csv('data_csv/dataset2.csv', index=False)
+    feature2 = pd.read_csv('data_csv/feature2.csv')
+    label_feature2 = pd.read_csv('data_csv/label_feature2.csv')
+    dataset2 = get_one_feature(feature2, label_feature2)
+    dataset2 = get_two_feature(feature2, dataset2)
+    dataset2 = get_three_feature(feature2, dataset2)
+    # dataset2 = get_shop_share_features(feature2,dataset2)
+    dataset2.drop_duplicates(inplace=True)
+    dataset2.to_csv('data_csv/dataset2.csv', index=False)
 
-    # feature1 = pd.read_csv('data_csv/feature1.csv')
-    # label_feature1 = pd.read_csv('data_csv/label_feature1.csv')
-    # dataset1 = get_one_feature(feature1, label_feature1)
-    # dataset1 = get_two_feature(feature1, dataset1)
-    # dataset1 = get_three_feature(feature1, dataset1)
-    # # dataset1 = get_shop_share_features(feature1,dataset1)
-    # dataset1.drop_duplicates(inplace=True)
-    # dataset1.to_csv('data_csv/dataset1.csv', index=False)
-
-
-    # features=[ 'item_category_list', 'item_property_list', 'predict_category_property','day']
-    #
-    # feature3 = pd.read_csv('data_csv/feature3.csv')
-    # dataset3 = pd.read_csv('data_csv/dataset3.csv')
-    # dataset3 = property_feature(feature3,dataset3)
-    # dataset3 = predict_feature(feature3,dataset3)
-    # dataset3 = dataset3.drop(features,axis=1)
-    # final3 = doTrick(dataset3)
-    # final3 = doTrick2(final3)
-    # final3 = user_reclick_times(final3)
-    # # final3 = do_brand_trick(final3)
-    # # final3 = do_category_trick(final3)
-    # final3.to_csv('data_csv/final3_encode.csv',index=False)
-    #
-    # feature2 = pd.read_csv('data_csv/feature2.csv')
-    # dataset2 = pd.read_csv('data_csv/dataset2.csv')
-    # dataset2 = property_feature(feature2,dataset2)
-    # dataset2 = predict_feature(feature2,dataset2)
-    # dataset2 = dataset2.drop(features, axis=1)
-    # final2 = doTrick(dataset2)
-    # final2 = doTrick2(final2)
-    # final2 = user_reclick_times(final2)
-    # # final2 = do_brand_trick(final2)
-    # # final2 = do_category_trick(final2)
-    # final2.to_csv('data_csv/final2_encode.csv', index=False)
-    #
-    # feature1 = pd.read_csv('data_csv/feature1.csv')
-    # dataset1 = pd.read_csv('data_csv/dataset1.csv')
-    # dataset1 = property_feature(feature1, dataset1)
-    # dataset1 = predict_feature(feature1, dataset1)
-    # dataset1 = dataset1.drop(features, axis=1)
-    # final1 = doTrick(dataset1)
-    # final1 = doTrick2(final1)
-    # final1 = user_reclick_times(final1)
-    # # final1 = do_brand_trick(final1)
-    # # final1 = do_category_trick(final1)
-    # final1.to_csv('data_csv/final1_encode.csv', index=False)
-    #
-    # print(final1.shape,final2.shape,final3.shape)
+    feature1 = pd.read_csv('data_csv/feature1.csv')
+    label_feature1 = pd.read_csv('data_csv/label_feature1.csv')
+    dataset1 = get_one_feature(feature1, label_feature1)
+    dataset1 = get_two_feature(feature1, dataset1)
+    dataset1 = get_three_feature(feature1, dataset1)
+    # dataset1 = get_shop_share_features(feature1,dataset1)
+    dataset1.drop_duplicates(inplace=True)
+    dataset1.to_csv('data_csv/dataset1.csv', index=False)
 
 
-    # final3=pd.read_csv('data_csv/final3_encode.csv')
-    # final3.to_csv('data_csv/final3_encode.csv',index=False)
+    features=[ 'item_category_list', 'item_property_list', 'predict_category_property','day']
+    
+    feature3 = pd.read_csv('data_csv/feature3.csv')
+    dataset3 = pd.read_csv('data_csv/dataset3.csv')
+    dataset3 = property_feature(feature3,dataset3)
+    dataset3 = predict_feature(feature3,dataset3)
+    dataset3 = dataset3.drop(features,axis=1)
+    final3 = doTrick(dataset3)
+    final3 = doTrick2(final3)
+    final3 = user_reclick_times(final3)
+    final3 = do_brand_trick(final3)
+    final3 = do_category_trick(final3)
+    final3.to_csv('data_csv/final3_encode.csv',index=False)
+    
+    feature2 = pd.read_csv('data_csv/feature2.csv')
+    dataset2 = pd.read_csv('data_csv/dataset2.csv')
+    dataset2 = property_feature(feature2,dataset2)
+    dataset2 = predict_feature(feature2,dataset2)
+    dataset2 = dataset2.drop(features, axis=1)
+    final2 = doTrick(dataset2)
+    final2 = doTrick2(final2)
+    final2 = user_reclick_times(final2)
+    final2 = do_brand_trick(final2)
+    final2 = do_category_trick(final2)
+    final2.to_csv('data_csv/final2_encode.csv', index=False)
+    
+    feature1 = pd.read_csv('data_csv/feature1.csv')
+    dataset1 = pd.read_csv('data_csv/dataset1.csv')
+    dataset1 = property_feature(feature1, dataset1)
+    dataset1 = predict_feature(feature1, dataset1)
+    dataset1 = dataset1.drop(features, axis=1)
+    final1 = doTrick(dataset1)
+    final1 = doTrick2(final1)
+    final1 = user_reclick_times(final1)
+    final1 = do_brand_trick(final1)
+    final1 = do_category_trick(final1)
+    final1.to_csv('data_csv/final1_encode.csv', index=False)
+    
+    print(final1.shape,final2.shape,final3.shape)
 
-    # final2 = pd.read_csv('data_csv/final2_encode.csv')
-    # print(final2)
-    # final2.to_csv('data_csv/final2_encode.csv', index=False)
 
-    # final1 = pd.read_csv('data_csv/final1_encode.csv')
-    # print(final1[final1['is_trade']==1])
-    # final1.to_csv('data_csv/final1_encode.csv', index=False)
+    final3=pd.read_csv('data_csv/final3_encode.csv')
+    final3.to_csv('data_csv/final3_encode.csv',index=False)
+
+    final2 = pd.read_csv('data_csv/final2_encode.csv')
+    print(final2)
+    final2.to_csv('data_csv/final2_encode.csv', index=False)
+
+    final1 = pd.read_csv('data_csv/final1_encode.csv')
+    print(final1[final1['is_trade']==1])
+    final1.to_csv('data_csv/final1_encode.csv', index=False)
