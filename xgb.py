@@ -163,9 +163,9 @@ params = {'booster': 'gbtree',
 
 watchlist = [(train_data,'train'),(val_data,'val')]
 model = xgb.train(params,train_data,num_boost_round=3500,evals=watchlist,early_stopping_rounds=100)
-# dataset2_preds['predicted_score'] = model.predict(val_data)
-# print(log_loss(dataset2_y,dataset2_preds['predicted_score']))
-# dataset2_preds.to_csv("C:/Users/user/Desktop/result_data2.txt", sep=' ',index=False)
+dataset2_preds['predicted_score'] = model.predict(val_data)
+print(log_loss(dataset2_y,dataset2_preds['predicted_score']))
+dataset2_preds.to_csv("C:/Users/user/Desktop/result_data2.txt", sep=' ',index=False)
 
 # dataset1 = xgb.DMatrix(dataset1_x, label=dataset1_y)
 # dataset2 = xgb.DMatrix(dataset2_x, label=dataset2_y)
