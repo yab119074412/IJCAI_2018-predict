@@ -8,6 +8,9 @@
 
 
 令收藏一波2018腾讯广告算法大赛前几名GitHub地址（由 @青红造了个白 整理）:
+
+
+
 rank 3:
 https://github.com/DiligentPanda/Tencent_Ads_Algo_2018
 
@@ -41,8 +44,6 @@ https://zhuanlan.zhihu.com/p/40479648
 
 Ti-one:
 https://zhuanlan.zhihu.com/p/39486410
-
-
 
 
 NNFM   杨毅同学
