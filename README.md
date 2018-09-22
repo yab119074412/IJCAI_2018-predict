@@ -7,7 +7,7 @@
 顺便贴一下另一个大佬的调参代码：https://github.com/jiaqiangbandongg/RPTune
 
 
-令收藏一波2018腾讯广告算法大赛前几名GitHub地址（由 @青红造了个白 整理）:
+另收藏一波2018腾讯广告算法大赛前几名GitHub地址（由 @青红造了个白 整理）:
 
 
 
