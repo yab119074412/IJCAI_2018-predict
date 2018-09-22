@@ -19,6 +19,8 @@ https://zhuanlan.zhihu.com/p/42089584
 
 rank6: 渣大
 https://zhuanlan.zhihu.com/p/38443751
+
+
 https://github.com/nzc/tencent-contest
 
 rank 7: 郭大，郭达雅
@@ -26,10 +28,12 @@ https://github.com/guoday/Tencent2018_Lookalike_Rank7th
 
 rank 9:
 https://github.com/ouwenjie03/tencent-ad-game
+
 https://zhuanlan.zhihu.com/p/38499275
 
 rank 11: 
 https://zhuanlan.zhihu.com/p/38034501
+
 https://github.com/liupengsay/2018-Tencent-social-advertising-algorithm-contest/tree/master/%E5%84%BF%E9%A1%BB%E6%88%90%E5%90%8D%E9%85%92%E9%A1%BB%E9%86%89_v2
 
 rank19:
